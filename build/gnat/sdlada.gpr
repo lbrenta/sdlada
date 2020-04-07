@@ -20,7 +20,7 @@ library project SDLAda is
 
    package Compiler is
       Common_Switches := ("-ffunction-sections", "-fdata-sections");
-      C_Switches      := ();
+      C_Switches      := External_As_List ("SDL_SWITCHES", " ");
       Ada_Switches    := ("-gnat2012", "-gnata", "-gnato", "-gnatE",
                           "-gnaty", "-gnaty-s", "-gnatyO", "-gnatyM120", "-gnatyx");
 
@@ -30,15 +30,6 @@ library project SDLAda is
 
          when "release" =>
             Common_Switches := Common_Switches & ("-O2");
-      end case;
-
-      --  These flags require checking on all platforms as they're taken directly from sdl2-config.
-      case Platform is
-         when "linux" | "bsd" | "android" | "windows" =>
-            C_Switches   := C_Switches & ("-I/usr/include/SDL2", "-D_REENTRANT");
-
-         when others =>
-            null;
       end case;
 
       for Default_Switches ("C") use Common_Switches & C_Switches;

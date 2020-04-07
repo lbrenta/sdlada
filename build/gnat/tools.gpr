@@ -9,7 +9,7 @@ project Tools is
    for Main        use ("gen_keyboard.adb");
 
    package Compiler is
-      C_Switches   := ("-ffunction-sections", "-fdata-sections");
+      C_Switches   := ("-ffunction-sections", "-fdata-sections") & External_As_List ("SDL_SWITCHES", " ");
       Ada_Switches := ("-ffunction-sections", "-fdata-sections",
                        "-gnat2012", "-gnata", "-gnato", "-gnatE",
                        "-gnaty", "-gnaty-s", "-gnatyO", "-gnatyM120", "-gnatyO");

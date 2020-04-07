@@ -33,6 +33,7 @@ endif
 
 # With GNAT, all static libs end with .a
 LIB_NAME	=	lib/libadasdl.a
+SDL_SWITCHES	=	"$(shell sdl2-config --cflags)"
 
 .PHONY: sdlada.gpr test_maths_build.gpr test.gpr tools.gpr
 
@@ -45,7 +46,8 @@ all: tools $(LIB_NAME) tests
 # SDL library
 
 $(LIB_NAME): sdlada.gpr $(GEN_KB)
-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+		-XSDL_SWITCHES=$(SDL_SWITCHES) \
 		-Psdlada.gpr
 
 .PHONY: clean-lib
@@ -64,7 +66,8 @@ $(GEN_KB): gen/$(SDL_MODE)/tools/gen_keyboard
 	./gen/$(SDL_MODE)/tools/gen_keyboard > $@
 
 gen/$(SDL_MODE)/tools/gen_keyboard:
-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+		-XSDL_SWITCHES=$(SDL_SWITCHES) \
 		-Ptools.gpr
 
 .PHONY: clean-kb clean-tools
@@ -84,8 +87,9 @@ tests: $(LIB_NAME) tests.gpr $(TESTS_SRCS)
 .PHONY: $(TESTS_SRCS)
 
 tests.gpr: $(TESTS_SRCS) gen/$(SDL_MODE)/test/libtestmaths.so
-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
-		-Ptests.gpr ${SDL2_CONFIG}
+	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+		-XSDL_SWITCHES=$(SDL_SWITCHES) \
+		-Ptests.gpr
 
 # Maths library
 
