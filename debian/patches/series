@@ -1,0 +1,3 @@
+0001-sdl-video-gl.adb-fix-typos.patch
+0002-Always-ignore-errors-from-gprclean.patch
+0003-Use-sdl2-config-to-obtain-correct-path-to-C-include-.patch

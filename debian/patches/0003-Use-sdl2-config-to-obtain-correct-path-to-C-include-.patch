@@ -1,0 +1,99 @@
+From 1b99b818871f506c89ff7b5ec709bacec2da9199 Mon Sep 17 00:00:00 2001
+From: Ludovic Brenta <ludovic@ludovic-brenta.org>
+Date: Tue, 7 Apr 2020 17:28:08 +0200
+Subject: [PATCH 3/3] Use sdl2-config to obtain correct path to C include
+ files.
+
+---
+ build/gnat/makefile   | 10 +++++++---
+ build/gnat/sdlada.gpr | 11 +----------
+ build/gnat/tools.gpr  |  2 +-
+ 3 files changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/build/gnat/makefile b/build/gnat/makefile
+index e6d94b7..cf828c6 100644
+--- a/build/gnat/makefile
++++ b/build/gnat/makefile
+@@ -27,6 +27,7 @@ GEN_KB		=	gen/src/sdl-events-keyboards.ads
+ 
+ # With GNAT, all static libs end with .a
+ LIB_NAME	=	lib/libadasdl.a
++SDL_SWITCHES	=	"$(shell sdl2-config --cflags)"
+ 
+ .PHONY: sdlada.gpr test_maths_build.gpr test.gpr tools.gpr
+ 
+@@ -39,7 +40,8 @@ all: tools $(LIB_NAME) tests
+ # SDL library
+ 
+ $(LIB_NAME): sdlada.gpr $(GEN_KB)
+-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++		-XSDL_SWITCHES=$(SDL_SWITCHES) \
+ 		-Psdlada.gpr
+ 
+ .PHONY: clean-lib
+@@ -58,7 +60,8 @@ $(GEN_KB): gen/$(SDL_MODE)/tools/gen_keyboard
+ 	./gen/$(SDL_MODE)/tools/gen_keyboard > $@
+ 
+ gen/$(SDL_MODE)/tools/gen_keyboard:
+-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++		-XSDL_SWITCHES=$(SDL_SWITCHES) \
+ 		-Ptools.gpr
+ 
+ .PHONY: clean-kb clean-tools
+@@ -78,7 +81,8 @@ tests: $(LIB_NAME) tests.gpr $(TESTS_SRCS)
+ .PHONY: $(TESTS_SRCS)
+ 
+ tests.gpr: $(TESTS_SRCS) gen/$(SDL_MODE)/test/libtestmaths.so
+-	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
++		-XSDL_SWITCHES=$(SDL_SWITCHES) \
+ 		-Ptests.gpr
+ 
+ # Maths library
+diff --git a/build/gnat/sdlada.gpr b/build/gnat/sdlada.gpr
+index ded47c1..3a5b6ce 100644
+--- a/build/gnat/sdlada.gpr
++++ b/build/gnat/sdlada.gpr
+@@ -20,7 +20,7 @@ library project SDLAda is
+ 
+    package Compiler is
+       Common_Switches := ("-ffunction-sections", "-fdata-sections");
+-      C_Switches      := ();
++      C_Switches      := External_As_List ("SDL_SWITCHES", " ");
+       Ada_Switches    := ("-gnat2012", "-gnata", "-gnato", "-gnatE",
+                           "-gnaty", "-gnaty-s", "-gnatyO", "-gnatyM120", "-gnatyx");
+ 
+@@ -32,15 +32,6 @@ library project SDLAda is
+             Common_Switches := Common_Switches & ("-O2");
+       end case;
+ 
+-      --  These flags require checking on all platforms as they're taken directly from sdl2-config.
+-      case Platform is
+-         when "linux" | "bsd" | "android" | "windows" =>
+-            C_Switches   := C_Switches & ("-I/usr/include/SDL2", "-D_REENTRANT");
+-
+-         when others =>
+-            null;
+-      end case;
+-
+       for Default_Switches ("C") use Common_Switches & C_Switches;
+       for Default_Switches ("Ada") use Common_Switches & Ada_Switches;
+    end Compiler;
+diff --git a/build/gnat/tools.gpr b/build/gnat/tools.gpr
+index cf2c253..598053f 100644
+--- a/build/gnat/tools.gpr
++++ b/build/gnat/tools.gpr
+@@ -9,7 +9,7 @@ project Tools is
+    for Main        use ("gen_keyboard.adb");
+ 
+    package Compiler is
+-      C_Switches   := ("-ffunction-sections", "-fdata-sections");
++      C_Switches   := ("-ffunction-sections", "-fdata-sections") & External_As_List ("SDL_SWITCHES", " ");
+       Ada_Switches := ("-ffunction-sections", "-fdata-sections",
+                        "-gnat2012", "-gnata", "-gnato", "-gnatE",
+                        "-gnaty", "-gnaty-s", "-gnatyO", "-gnatyM120", "-gnatyO");
+-- 
+2.25.1
+
