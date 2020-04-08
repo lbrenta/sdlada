@@ -1,0 +1,39 @@
+Source: libsdlada2
+Priority: optional
+Section: libdevel
+Maintainer: Ludovic Brenta <lbrenta@debian.org>
+Build-Depends: dpkg-dev (>= 1.16.1), debhelper (>= 10),
+# Rules regenerate all the configure stuff.
+ gnat, gnat-9, dh-ada-library (>= 6),
+ libsdl2-dev, libsdl2-image-dev, libsdl2-ttf-dev
+Build-Depends-Indep: 
+Standards-Version: 3.9.5
+Vcs-Browser: 
+Vcs-Git: 
+Homepage: https://github.com/Lucretia/sdlada
+
+Package: libsdlada2-dev
+Architecture: any
+Depends: ${misc:Depends}, ${ada:Depends}
+Recommends: libsdlada2-doc
+Description: Ada binding to SDL2
+ This package contains the static libraries, documentation, and Ada
+ specification files.  Install it if you want to develop SDL2
+ applications in Ada.
+
+Package: libsdlada2-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}, ${sphinxdoc:Depends}
+Suggests: gnat
+Description: Ada binding to SDL2 - documentation
+ This package contains the documentation in text, PDF and HTML.
+
+Package: libsdlada2-0
+Section: libs
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: same
+Description: Ada binding to SDL2
+ This package contains the runtime shared library.

@@ -1,0 +1,65 @@
+#!/usr/bin/make -f
+# Build script for XML/Ada in Debian.
+# Copyright (c) 2020 Ludovic Brenta <lbrenta@debian.org>
+
+# This build script is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3 of the
+# License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
+# USA
+
+# On Debian systems, the full text of the GPL is in the file
+# /usr/share/common-licenses/GPL-3.
+
+include /usr/share/dpkg/default.mk
+include /usr/share/ada/debian_packaging-9.mk
+
+POLICY_TARGETS := binary binary-arch binary-indep build build-arch \
+ build-indep clean
+.PHONY: $(POLICY_TARGETS)
+$(POLICY_TARGETS):
+	dh $@ --with ada-library
+
+override_dh_auto_build-arch:
+	make -C build/gnat
+
+override_dh_clean clean:
+	make -C build/gnat clean
+
+# Maintainer scripts:
+# I have cloned upstream's git repository, so upstream is branch master.
+# I make changes to upstream as commits to the debian/patches branch.
+# The packaging scripts are in the debian/master branch.
+
+include /usr/share/dpkg/pkg-info.mk
+
+get-orig-source: clean
+# Reconstructs the upstream tarball from the master branch of this git repo.
+	git checkout master && \
+	tar --create --file=../$(DEB_SOURCE)_$(DEB_VERSION_UPSTREAM).orig.tar.xz \
+		--exclude-vcs \
+		--exclude=.pc \
+		--transform="s,^.,$(DEB_SOURCE)-$(DEB_VERSION_UPSTREAM),g" \
+		--auto-compress \
+		.
+	@echo "Switched to branch master."
+
+debian/patches/series: force
+# Regenerate the quilt patch series from the debian/patches branch.
+# The quilt series exists only in the debian/master branch.
+	rm -rf .pc
+	git checkout debian/master
+	git format-patch --output-directory debian/patches master..debian/patches
+	(cd debian/patches; ls -1 *.patch) > $@
+	@echo "Switched to branch debian/master."
+
+.PHONY: force clean
