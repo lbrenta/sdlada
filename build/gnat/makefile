@@ -51,7 +51,7 @@ $(LIB_NAME): sdlada.gpr $(GEN_KB)
 .PHONY: clean-lib
 
 clean-lib:
-	$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+	-$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
 		-Psdlada.gpr
 
 
@@ -74,7 +74,7 @@ clean-kb:
 
 clean-tools:
 
-	$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptools.gpr
+	-$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptools.gpr
 
 #####################################################################################
 # Tests
@@ -96,8 +96,8 @@ gen/$(SDL_MODE)/test/libtestmaths.so: $(SRC_DIR)/test/maths/maths.ad[sb] $(SRC_D
 .PHONY: clean-tests
 
 clean-tests:
-	$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptests.gpr
-	$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptest_maths_build.gpr
+	-$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptests.gpr
+	-$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Ptest_maths_build.gpr
 
 #####################################################################################
 # Unit tests
@@ -111,7 +111,7 @@ build_unit_tests/unit_tests:
 .PHONY: clean-unit_tests
 
 clean-unit_tests:
-	-$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Punit_tests.gpr
+	--$(GPRCLEAN) -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) -Punit_tests.gpr
 
 #####################################################################################
 .PHONY: install
