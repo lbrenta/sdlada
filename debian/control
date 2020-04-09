@@ -24,7 +24,7 @@ Description: Ada binding to SDL2
 Package: libsdlada2-doc
 Section: doc
 Architecture: all
-Depends: ${misc:Depends}, ${sphinxdoc:Depends}
+Depends: ${misc:Depends}
 Suggests: gnat
 Description: Ada binding to SDL2 - documentation
  This package contains the documentation in text, PDF and HTML.

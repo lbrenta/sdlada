@@ -23,17 +23,29 @@
 include /usr/share/dpkg/default.mk
 include /usr/share/ada/debian_packaging-9.mk
 
+VERSION=libsdlada2.so.0
+SDL_SWITCHES := -XSDL_SWITCHES="$(shell sdl2-config --cflags)"
+GPRBUILD := gprbuild -Pdebian/build_sdlada2 $(SDL_SWITCHES) -p
+GPRCLEAN := gprclean -Pdebian/build_sdlada2 $(SDL_SWITCHES)
+
 POLICY_TARGETS := binary binary-arch binary-indep build build-arch \
- build-indep clean
+ build-indep install
 .PHONY: $(POLICY_TARGETS)
 $(POLICY_TARGETS):
 	dh $@ --with ada-library
 
 override_dh_auto_build-arch:
-	make -C build/gnat
+	make -C build/gnat gen/src/sdl-events-keyboards.ads
+	$(GPRBUILD) -XLIBRARY_KIND=static
+	$(GPRBUILD) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
+	sed 's,$${DEB_HOST_MULTIARCH},$(DEB_HOST_MULTIARCH),g' < debian/sdlada2.gpr.in > debian/sdlada2.gpr
 
 override_dh_clean clean:
+	dh_clean
 	make -C build/gnat clean
+	-$(GPRCLEAN) -XLIBRARY_KIND=static
+	-$(GPRCLEAN) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
+	rm -f debian/sdlada2.gpr
 
 # Maintainer scripts:
 # I have cloned upstream's git repository, so upstream is branch master.

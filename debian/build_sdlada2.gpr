@@ -1,0 +1,51 @@
+-- Project file to build SDLAda for Debian packaging
+-- Copyright (c) 2020 Ludovic Brenta <lbrenta@debian.org>
+--
+-- This build script is free software; you can redistribute it and/or
+-- modify it under the terms of the GNU General Public License as
+-- published by the Free Software Foundation; either version 3 of the
+-- License, or (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful, but
+-- WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-- General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program; if not, write to the Free Software
+-- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
+-- USA
+--
+-- On Debian systems, the full text of the GPL is in the file
+-- /usr/share/common-licenses/GPL-3.
+
+-- We bypass upstream's project file because we want to compile both
+-- static and shared libraries and install them into the Debian
+-- filesystem.
+
+library project Build_SDLAda2 is
+
+   type Library_Kind is ("dynamic", "static");
+   Kind : Library_Kind := External ("LIBRARY_KIND");
+
+   for Languages use ("Ada", "C");
+   for Source_Dirs  use ("../src", "../src/linux", "../build/gnat/gen/src", "../src/image", "../src/ttf");
+   for Library_Name use "sdlada2";
+   for Object_Dir   use "../." & Kind;
+   for Library_Dir  use "../lib/" & Kind;
+   for Library_Kind use Kind;
+
+   case Kind is
+     when "dynamic" =>
+        for Library_Version use External ("VERSION");
+        for Library_Options use ("-Wl,--as-needed", "-lSDL2", "-lSDL2_ttf", "-lSDL2_image");
+     when "static" =>
+        null;
+   end case;
+
+  package Compiler is
+     for Default_Switches ("Ada") use ("-g", "-O2", "-gnatN", "-gnatws", "-fstack-check");
+     for Default_Switches ("C") use ("-g", "-O2") & External_As_List ("SDL_SWITCHES", " ");
+  end Compiler;
+  
+end Build_SDLAda2;
