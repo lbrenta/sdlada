@@ -44,6 +44,7 @@ override_dh_clean clean:
 	make -C build/gnat clean
 	-$(GPRCLEAN) -XLIBRARY_KIND=static
 	-$(GPRCLEAN) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
+	rm -rf $(foreach d,static dynamic,.$(d) $(d)) $(foreach l,debug release,build/gnat/gen/$(l))
 
 # Maintainer scripts:
 # I have cloned upstream's git repository, so upstream is branch master.
