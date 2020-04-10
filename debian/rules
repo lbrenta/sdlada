@@ -38,14 +38,12 @@ override_dh_auto_build-arch:
 	make -C build/gnat gen/src/sdl-events-keyboards.ads
 	$(GPRBUILD) -XLIBRARY_KIND=static
 	$(GPRBUILD) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
-	sed 's,$${DEB_HOST_MULTIARCH},$(DEB_HOST_MULTIARCH),g' < debian/sdlada2.gpr.in > debian/sdlada2.gpr
 
 override_dh_clean clean:
 	dh_clean
 	make -C build/gnat clean
 	-$(GPRCLEAN) -XLIBRARY_KIND=static
 	-$(GPRCLEAN) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
-	rm -f debian/sdlada2.gpr
 
 # Maintainer scripts:
 # I have cloned upstream's git repository, so upstream is branch master.

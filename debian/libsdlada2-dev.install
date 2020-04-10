@@ -1,9 +1,0 @@
-lib/dynamic/*.ali   usr/lib/${DEB_HOST_MULTIARCH}/ada/adalib/sdlada2
-lib/dynamic/lib*.so usr/lib/${DEB_HOST_MULTIARCH}
-lib/static/lib*.a   usr/lib/${DEB_HOST_MULTIARCH}
-src/*.ad[bs]                usr/share/ada/adainclude/sdlada2
-src/linux/*.ad[bs]          usr/share/ada/adainclude/sdlada2
-src/image/*.ad[bs]          usr/share/ada/adainclude/sdlada2
-src/ttf/*.ad[bs]            usr/share/ada/adainclude/sdlada2
-build/gnat/gen/src/*.ad[bs] usr/share/ada/adainclude/sdlada2
-debian/sdlada2.gpr          usr/share/ada/adainclude

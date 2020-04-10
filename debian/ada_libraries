@@ -1,0 +1,4 @@
+LIBRARY_KIND=dynamic
+SDL_SWITCHES=
+VERSION=ignored
+debian/build_sdlada2.gpr
