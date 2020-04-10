@@ -1,17 +1,17 @@
-From dcbea1981a0eb81857043509043f75873e2396e6 Mon Sep 17 00:00:00 2001
+From 9e2087cf4b592a6064d66e20e5b9c5eb04909e9f Mon Sep 17 00:00:00 2001
 From: Ludovic Brenta <ludovic@ludovic-brenta.org>
 Date: Wed, 8 Apr 2020 14:44:15 +0200
-Subject: [PATCH 2/3] Always ignore errors from gprclean.
+Subject: [PATCH 1/2] Always ignore errors from gprclean.
 
 ---
  build/gnat/makefile | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/build/gnat/makefile b/build/gnat/makefile
-index 779a091..e6d94b7 100644
+index 8134e79..d2aadc7 100644
 --- a/build/gnat/makefile
 +++ b/build/gnat/makefile
-@@ -45,7 +45,7 @@ $(LIB_NAME): sdlada.gpr $(GEN_KB)
+@@ -51,7 +51,7 @@ $(LIB_NAME): sdlada.gpr $(GEN_KB)
  .PHONY: clean-lib
  
  clean-lib:
@@ -20,7 +20,7 @@ index 779a091..e6d94b7 100644
  		-Psdlada.gpr
  
  
-@@ -68,7 +68,7 @@ clean-kb:
+@@ -74,7 +74,7 @@ clean-kb:
  
  clean-tools:
  
@@ -29,7 +29,7 @@ index 779a091..e6d94b7 100644
  
  #####################################################################################
  # Tests
-@@ -90,8 +90,8 @@ gen/$(SDL_MODE)/test/libtestmaths.so: $(SRC_DIR)/test/maths/maths.ad[sb] $(SRC_D
+@@ -96,8 +96,8 @@ gen/$(SDL_MODE)/test/libtestmaths.so: $(SRC_DIR)/test/maths/maths.ad[sb] $(SRC_D
  .PHONY: clean-tests
  
  clean-tests:
@@ -40,7 +40,7 @@ index 779a091..e6d94b7 100644
  
  #####################################################################################
  # Unit tests
-@@ -105,7 +105,7 @@ build_unit_tests/unit_tests:
+@@ -111,7 +111,7 @@ build_unit_tests/unit_tests:
  .PHONY: clean-unit_tests
  
  clean-unit_tests:

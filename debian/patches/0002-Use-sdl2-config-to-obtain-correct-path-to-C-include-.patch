@@ -1,20 +1,20 @@
-From 1b99b818871f506c89ff7b5ec709bacec2da9199 Mon Sep 17 00:00:00 2001
+From 822789f24929cef0bf47e3f9504d978c2d08ef69 Mon Sep 17 00:00:00 2001
 From: Ludovic Brenta <ludovic@ludovic-brenta.org>
 Date: Tue, 7 Apr 2020 17:28:08 +0200
-Subject: [PATCH 3/3] Use sdl2-config to obtain correct path to C include
+Subject: [PATCH 2/2] Use sdl2-config to obtain correct path to C include
  files.
 
 ---
- build/gnat/makefile   | 10 +++++++---
+ build/gnat/makefile   | 12 ++++++++----
  build/gnat/sdlada.gpr | 11 +----------
  build/gnat/tools.gpr  |  2 +-
- 3 files changed, 9 insertions(+), 14 deletions(-)
+ 3 files changed, 10 insertions(+), 15 deletions(-)
 
 diff --git a/build/gnat/makefile b/build/gnat/makefile
-index e6d94b7..cf828c6 100644
+index d2aadc7..322bef6 100644
 --- a/build/gnat/makefile
 +++ b/build/gnat/makefile
-@@ -27,6 +27,7 @@ GEN_KB		=	gen/src/sdl-events-keyboards.ads
+@@ -33,6 +33,7 @@ endif
  
  # With GNAT, all static libs end with .a
  LIB_NAME	=	lib/libadasdl.a
@@ -22,7 +22,7 @@ index e6d94b7..cf828c6 100644
  
  .PHONY: sdlada.gpr test_maths_build.gpr test.gpr tools.gpr
  
-@@ -39,7 +40,8 @@ all: tools $(LIB_NAME) tests
+@@ -45,7 +46,8 @@ all: tools $(LIB_NAME) tests
  # SDL library
  
  $(LIB_NAME): sdlada.gpr $(GEN_KB)
@@ -32,7 +32,7 @@ index e6d94b7..cf828c6 100644
  		-Psdlada.gpr
  
  .PHONY: clean-lib
-@@ -58,7 +60,8 @@ $(GEN_KB): gen/$(SDL_MODE)/tools/gen_keyboard
+@@ -64,7 +66,8 @@ $(GEN_KB): gen/$(SDL_MODE)/tools/gen_keyboard
  	./gen/$(SDL_MODE)/tools/gen_keyboard > $@
  
  gen/$(SDL_MODE)/tools/gen_keyboard:
@@ -42,18 +42,20 @@ index e6d94b7..cf828c6 100644
  		-Ptools.gpr
  
  .PHONY: clean-kb clean-tools
-@@ -78,7 +81,8 @@ tests: $(LIB_NAME) tests.gpr $(TESTS_SRCS)
+@@ -84,8 +87,9 @@ tests: $(LIB_NAME) tests.gpr $(TESTS_SRCS)
  .PHONY: $(TESTS_SRCS)
  
  tests.gpr: $(TESTS_SRCS) gen/$(SDL_MODE)/test/libtestmaths.so
 -	$(GPRMAKE) -p -gnat2012 -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
+-		-Ptests.gpr ${SDL2_CONFIG}
 +	$(GPRMAKE) -p -XSDL_MODE=$(SDL_MODE) -XSDL_PLATFORM=$(SDL_PLATFORM) \
 +		-XSDL_SWITCHES=$(SDL_SWITCHES) \
- 		-Ptests.gpr
++		-Ptests.gpr
  
  # Maths library
+ 
 diff --git a/build/gnat/sdlada.gpr b/build/gnat/sdlada.gpr
-index ded47c1..3a5b6ce 100644
+index 0031410..ce37071 100644
 --- a/build/gnat/sdlada.gpr
 +++ b/build/gnat/sdlada.gpr
 @@ -20,7 +20,7 @@ library project SDLAda is
