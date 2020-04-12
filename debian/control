@@ -15,7 +15,7 @@ Homepage: https://github.com/Lucretia/sdlada
 
 Package: libsdlada2-0-dev
 Architecture: any
-Depends: ${misc:Depends}, ${ada:Depends}
+Depends: libsdl2-dev, libsdl2-image-dev, libsdl2-ttf-dev, ${misc:Depends}, ${ada:Depends}
 Recommends: libsdlada2-doc
 Description: Ada binding to SDL2
  This package contains the static libraries, documentation, and Ada
