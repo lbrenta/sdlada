@@ -3,7 +3,6 @@ Priority: optional
 Section: libdevel
 Maintainer: Ludovic Brenta <lbrenta@debian.org>
 Build-Depends: dpkg-dev (>= 1.16.1), debhelper (>= 12),
-# Rules regenerate all the configure stuff.
  gnat, gnat-9, dh-ada-library (>= 6),
  libsdl2-dev, libsdl2-image-dev, libsdl2-ttf-dev
 Build-Depends-Arch: dh-sequence-ada-library
@@ -18,7 +17,7 @@ Architecture: any
 Depends: libsdl2-dev, libsdl2-image-dev, libsdl2-ttf-dev, ${misc:Depends}, ${ada:Depends}
 Recommends: libsdlada2-doc
 Description: Ada binding to SDL2
- This package contains the static libraries, documentation, and Ada
+ This package contains the static library, documentation and Ada
  specification files.  Install it if you want to develop SDL2
  applications in Ada.
 
@@ -28,7 +27,7 @@ Architecture: all
 Depends: ${misc:Depends}
 Suggests: gnat
 Description: Ada binding to SDL2 - documentation
- This package contains the documentation in text, PDF and HTML.
+ This package contains the documentation and examples.
 
 Package: libsdlada2-0
 Section: libs
