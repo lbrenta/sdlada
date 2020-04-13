@@ -2,7 +2,6 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: SDLAda
 Upstream-Contact: Luke A. Guest
 Source: https://github.com/Lucretia/sdlada
-Files-Excluded: debian
 
 Files: *
 Copyright: 2013-2020 Luke A. Guest

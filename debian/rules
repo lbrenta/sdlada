@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # Build script for XML/Ada in Debian.
 # Copyright (c) 2020 Ludovic Brenta <lbrenta@debian.org>
-# 
+#
 # This software is provided 'as-is', without any express or implied
 # warranty. In no event will the authors be held liable for any damages
 # arising from the use of this software.
@@ -26,11 +26,11 @@ include /usr/share/ada/debian_packaging-9.mk
 
 VERSION=libsdlada2.so.0
 SDL_SWITCHES := -XSDL_SWITCHES="$(shell sdl2-config --cflags)"
-GPRBUILD := gprbuild -Pdebian/build_sdlada2 $(SDL_SWITCHES) -p
+GPRBUILD := gprbuild -Pdebian/build_sdlada2 $(SDL_SWITCHES) $(BUILDER_OPTIONS) -p
 GPRCLEAN := gprclean -Pdebian/build_sdlada2 $(SDL_SWITCHES)
 
 POLICY_TARGETS := binary binary-arch binary-indep build build-arch \
- build-indep install
+ build-indep install clean
 .PHONY: $(POLICY_TARGETS)
 $(POLICY_TARGETS):
 	dh $@ --with ada-library
@@ -40,8 +40,7 @@ override_dh_auto_build-arch:
 	$(GPRBUILD) -XLIBRARY_KIND=static
 	$(GPRBUILD) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)
 
-override_dh_clean clean:
-	dh_clean
+override_dh_auto_clean:
 	make -C build/gnat clean
 	-$(GPRCLEAN) -XLIBRARY_KIND=static
 	-$(GPRCLEAN) -XLIBRARY_KIND=dynamic -XVERSION=$(VERSION)

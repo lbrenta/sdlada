@@ -1,5 +1,5 @@
 libsdlada2 (2.4.0-1) unstable; urgency=medium
 
-  * Initial packaging.
+  * Initial packaging.  Closes: #956606.
 
- -- Ludovic Brenta <lbrenta@debian.org>  Fri, 10 Apr 2020 14:43:00 +0200
+ -- Ludovic Brenta <lbrenta@debian.org>  Mon, 13 Apr 2020 17:03:56 +0200
